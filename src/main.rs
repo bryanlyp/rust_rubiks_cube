@@ -1,4 +1,5 @@
 mod rubiks_cube;
 fn main() {
-    println!("Hello world!");
+    let cube = rubiks_cube::Cube::init_solved();
+    cube.display();
 }

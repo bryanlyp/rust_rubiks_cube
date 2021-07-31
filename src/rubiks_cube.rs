@@ -1,41 +1,47 @@
 struct Face {
-    values: [[i32; 3]; 3],
+    values: [[usize; 3]; 3],
 }
 impl Face {
-    fn display(&self) {
-        for i in 0..3 {
-            for j in 0..3 {
-                print!("{} ", self.values[i][j]);
-            }
-            println!("");
-        }
-    }
-    fn rotate_clockwise(&self) {
-        let mut temp = [[-1; 3]; 3];
-        for i in 0..3 {
-            for j in 0..3 {
-                temp[i][j] = self.values[i][j];
-            }
-        }
-        for i in 0..3 {
-            for j in 0..3 {
-                self.values[j][2-i] = temp[i][j];
-            }
-        }
-    }
-}
+    fn init(val: usize) -> Face {
+        return Face {
+            values: [[val; 3]; 3],
+        };
 
-pub enum Face_Names {
-    Front,
-    Left,
-    Right,
-    Top,
-    Bottom,
-    Back,
+    }
 }
 
 pub struct Cube {
     faces: [Face; 6],
 }
+
 impl Cube {
+    pub fn init_solved() -> Cube {
+        let faces: [Face; 6] = [Face::init(0), Face::init(1), Face::init(2), Face::init(3), Face::init(4), Face::init(5)];
+        return Cube {
+            faces: faces,
+        };
+    }
+
+    pub fn display(&self) {
+        for i in 0..3 {
+            println!("      {} {} {}", self.faces[2].values[i][0], self.faces[2].values[i][1], self.faces[2].values[i][2]);
+        }
+        for i in 0..3 {
+            print!("{} {} {} ", self.faces[4].values[i][0], self.faces[4].values[i][1], self.faces[4].values[i][2]);
+            print!("{} {} {} ", self.faces[0].values[i][0], self.faces[0].values[i][1], self.faces[0].values[i][2]);
+            print!("{} {} {} ", self.faces[1].values[i][0], self.faces[1].values[i][1], self.faces[1].values[i][2]);
+            println!("");
+        }
+
+        for i in 0..3 {
+            println!("      {} {} {}", self.faces[3].values[i][0], self.faces[3].values[i][1], self.faces[3].values[i][2]);
+        }
+        for i in 0..3 {
+            println!("      {} {} {}", self.faces[5].values[i][0], self.faces[5].values[i][1], self.faces[5].values[i][2]);
+        }
+
+    }
+
 }
+
+
