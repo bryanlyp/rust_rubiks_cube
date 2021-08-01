@@ -1,5 +1,11 @@
 mod rubiks_cube;
 fn main() {
-    let cube = rubiks_cube::Cube::init_solved();
+    let mut cube = rubiks_cube::Cube::init_solved();
     cube.display();
+    println!("Rotating front face clockwise...");
+    cube.rotate_clockwise(0);
+    cube.display();
+    println!("Rotating top face clockwise...");
+    cube.rotate_clockwise(2);
+    cube.display()
 }
