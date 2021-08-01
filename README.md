@@ -1,4 +1,4 @@
-# rust_rubiks_cube
+# Rubik's Cube in Rust
 This is a 3x3 Rubik's Cube implemented in Rust.
 
 Code is functional and implements functions for rotation of different faces in clockwise and counter-clockwise directions. More functions will be added in to assist with usability. 
