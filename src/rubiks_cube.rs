@@ -101,7 +101,7 @@ impl Cube {
     }
     pub fn rotate_counter_clockwise(&mut self, front_idx: usize) {
         //TODO: implement proper counter clockwise rotation?
-        for _i = 0..3 {
+        for _i in 0..3 {
             self.rotate_clockwise(front_idx);
         }
     }

@@ -7,5 +7,8 @@ fn main() {
     cube.display();
     println!("Rotating top face clockwise...");
     cube.rotate_clockwise(2);
-    cube.display()
+    cube.display();
+    cube.rotate_counter_clockwise(2);
+    cube.rotate_counter_clockwise(0);
+    cube.display();
 }
