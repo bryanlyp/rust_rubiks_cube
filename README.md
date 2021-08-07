@@ -2,7 +2,7 @@
 ## Description
 This is a 3x3 Rubik's Cube implemented in Rust.
 
-Code is currently working, and implements a functional game :). 
+Code is currently working, and implements a functional game :)
  
 The indexes are chosen to match a standard die face.
 
