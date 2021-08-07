@@ -1,3 +1,8 @@
+use std::io;
+use std::io::Write;
+use rand::Rng;
+//use std::collections::HashMap;
+
 pub struct Cube {
     faces: [[[usize; 3]; 3]; 6],
 }
@@ -106,5 +111,160 @@ impl Cube {
         }
     }
 }
+
+pub struct GameManager {
+    cube: Cube,
+    moves: Vec<u8>,
+}
+
+impl GameManager {
+    pub fn new() -> GameManager {
+        return GameManager {
+            moves: String::from("").into_bytes(),
+            cube: Cube::init_solved(),
+        };
+    }
+    fn randomize(&mut self) {
+        let faces_arr = [b'F', b'B', b'b', b'R', b'L', b'T'];
+        let dir_arr = [b'C', b'c'];
+        let mut rng = rand::thread_rng();
+
+        let mut move_seq = Vec::new();
+        for _i in 0..100 {
+            move_seq.push(faces_arr[rng.gen_range(0..6)]);
+            move_seq.push(dir_arr[rng.gen_range(0..2)]);
+        }
+        self.process_moves(&move_seq);
+
+        return;
+    }
+
+
+    pub fn start_game(&mut self) {
+        let mut move_sequence = String::new();
+        let mut to_randomize = String::new();
+        println!("Starting game...");
+        print!("Randomize cube? [Y/N]: ");
+
+
+        loop {
+            io::stdout().flush().unwrap();
+            io::stdin()
+                .read_line(&mut to_randomize)
+                .expect("Read error, try again.");
+
+            if to_randomize.trim() == "Y" {
+                self.randomize();
+                break;
+            } else if to_randomize.trim() == "N" {
+                break;
+            } else {
+                print!("Enter Y/N only: ");
+                to_randomize.clear();
+            }
+        }
+        println!("Cube initialized.");
+        println!("Enter 'q' to quit or 'h' for input help.");
+        loop {
+            self.cube.display();
+            println!("Enter sequence of moves: ");
+            io::stdin()
+                .read_line(&mut move_sequence)
+                .expect("Read error, try again.");
+
+            move_sequence = move_sequence
+                .trim()
+                .to_string();
+            
+            if move_sequence.len() == 1 && move_sequence == "q" {
+                println!("Exiting game.");
+                return;
+            } else if move_sequence.len() == 1 && move_sequence == "h" {
+                println!("Front face: F");
+                println!("Back face: b");
+                println!("Right face: R");
+                println!("Left face: L");
+                println!("Bottom face: B");
+                println!("Top face: T");
+                println!("Append C or c to denote clockwise and counter-clockwise respectively.");
+            } else if move_sequence.len() % 2 == 0 {
+                let byte_str = move_sequence.as_bytes().to_vec();
+                self.process_moves(&byte_str);
+            }
+            move_sequence.clear();
+        }
+        //println!("{}",move_sequence);
+        //GameManager::vectorize(&move_sequence);
+    }
+
+    fn process_moves(&mut self, bytes: &Vec<u8>) {
+        let mut i = 0;
+        let mut value: usize;
+        let mut move_sequence = Vec::new();
+
+        for byte in bytes {
+            if i % 2 == 0 {
+                match *byte as char {
+                    'F' => {
+                        value = 0;
+                    }
+                    'R' => {
+                        value = 1;
+                    }
+                    'T' => {
+                        value = 2;
+                    }
+                    'B' => {
+                        value = 3;
+                    }
+                    'L' => {
+                        value = 4;
+                    }
+                    'b' => {
+                        value = 5;
+                    }
+                    _ => {
+                        println!("Invalid input.");
+                        return;
+                    }
+                }
+
+            } else {
+                match *byte as char {
+                    'C' => { 
+                        value = 0;
+                    }
+                    'c' => {
+                        value = 1;
+                    }
+                    _ => {
+                        println!("Invalid input.");
+                        return;
+                    }
+                }
+            }
+            move_sequence.push(value);
+            i += 1;
+        }
+        i = 0;
+        value = move_sequence[0];
+        for moves in move_sequence {
+            if i % 2 == 0 {
+                value = moves;
+            } else {
+                if moves == 0 {
+                    self.cube.rotate_clockwise(value);
+                } else {
+                    self.cube.rotate_counter_clockwise(value);
+                }
+            }
+            i += 1;
+        }
+
+
+    }
+
+}
+
 
 
